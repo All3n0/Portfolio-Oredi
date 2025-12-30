@@ -1,5 +1,6 @@
 'use client';
 import { useState } from "react";
+import { Eye, X } from "lucide-react";
 
 interface GalleryItem {
   id: number;
@@ -63,6 +64,24 @@ const items: GalleryItem[] = [
 
 const GallerySection = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [tappedId, setTappedId] = useState<number | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleItemClick = (id: number) => {
+    // On mobile, toggle details on tap
+    if (window.innerWidth < 768) {
+      setTappedId(tappedId === id ? null : id);
+      setShowDetails(tappedId !== id);
+    }
+  };
+
+  const handleItemTouch = (id: number) => {
+    // For touch devices
+    if (window.innerWidth < 768) {
+      setTappedId(tappedId === id ? null : id);
+      setShowDetails(tappedId !== id);
+    }
+  };
 
   return (
     <section id="gallery" className="py-32 relative bg-charcoal/30">
@@ -73,58 +92,102 @@ const GallerySection = () => {
           <h2 className="font-display text-4xl md:text-5xl text-cream tracking-wide">
             Art <span className="text-gold italic font-serif font-light">Gallery</span>
           </h2>
+          {/* Mobile instruction */}
+          <p className="md:hidden text-muted-foreground text-xs tracking-widest uppercase mt-4">
+            Tap artworks for details
+          </p>
         </div>
 
         {/* Gallery Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-1">
-          {items.map((item) => (
-            <div
-              key={item.id}
-className="aspect-square relative overflow-hidden group cursor-pointer glow-hover bg-cover bg-center"
-  style={{ backgroundImage: `url(${item.image})` }}              onMouseEnter={() => setHoveredId(item.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              {/* Background pattern */}
-              <div className="absolute inset-0 opacity-5">
-                <div className="w-full h-full" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L20 40M0 20L40 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/%3E%3C/svg%3E")`,
-                }} />
-              </div>
-
-              {/* Content */}
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="text-center">
-                  <span className="text-6xl text-gold/10 font-display">
-                    {String(item.id).padStart(2, '0')}
-                  </span>
-                </div>
-              </div>
-
-              {/* Hover overlay */}
-              <div 
-                className={`absolute inset-0 bg-background/95 flex flex-col items-center justify-center p-8 transition-all duration-500 ${
-                  hoveredId === item.id ? "opacity-100" : "opacity-0"
-                }`}
+          {items.map((item) => {
+            const isActive = hoveredId === item.id || tappedId === item.id;
+            
+            return (
+              <div
+                key={item.id}
+                className="aspect-square relative overflow-hidden group cursor-pointer glow-hover bg-cover bg-center"
+                style={{ backgroundImage: `url(${item.image})` }}
+                onMouseEnter={() => setHoveredId(item.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                onClick={() => handleItemClick(item.id)}
+                onTouchStart={() => handleItemTouch(item.id)}
               >
-                <p className="text-gold/70 text-xs tracking-widest uppercase mb-2">
-                  {item.category}
-                </p>
-                <h3 className="font-display text-2xl text-cream tracking-wide text-center mb-4">
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground text-sm font-serif text-center">
-                  {item.description}
-                </p>
-              </div>
+                {/* Background pattern */}
+                <div className="absolute inset-0 opacity-5">
+                  <div className="w-full h-full" style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L20 40M0 20L40 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/%3E%3C/svg%3E")`,
+                  }} />
+                </div>
 
-              {/* Border on hover */}
-              <div 
-                className={`absolute inset-0 border transition-all duration-500 ${
-                  hoveredId === item.id ? "border-gold/30" : "border-transparent"
-                }`} 
-              />
-            </div>
-          ))}
+                {/* Content */}
+                <div className="absolute inset-0 flex items-center justify-center p-8">
+                  <div className="text-center">
+                    <span className="text-6xl text-gold/10 font-display">
+                      {String(item.id).padStart(2, '0')}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Mobile tap indicator */}
+                <div className="md:hidden absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full p-2 border border-gold/20">
+                  <Eye className="w-4 h-4 text-gold/60" />
+                </div>
+
+                {/* Hover/tap overlay */}
+                <div 
+                  className={`absolute inset-0 bg-background/95 flex flex-col items-center justify-center p-8 transition-all duration-500 ${
+                    isActive ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  {/* Close button for mobile */}
+                  {isActive && window.innerWidth < 768 && (
+                    <button 
+                      className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full p-2 border border-gold/20 hover:bg-background transition-colors z-20"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTappedId(null);
+                        setShowDetails(false);
+                      }}
+                    >
+                      <X className="w-4 h-4 text-gold/60" />
+                    </button>
+                  )}
+                  
+                  <p className="text-gold/70 text-xs tracking-widest uppercase mb-2">
+                    {item.category}
+                  </p>
+                  <h3 className="font-display text-2xl text-cream tracking-wide text-center mb-4">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm font-serif text-center">
+                    {item.description}
+                  </p>
+                  
+                  {/* Mobile-only fullscreen button */}
+                  {/* {isActive && window.innerWidth < 768 && (
+                    // <button 
+                    //   className="mt-6 text-gold text-xs tracking-widest uppercase border border-gold/30 px-4 py-2 hover:bg-gold/10 transition-colors"
+                    //   onClick={(e) => {
+                    //     e.stopPropagation();
+                    //     // You could add a fullscreen view here
+                    //     alert(`Viewing ${item.title} in detail`);
+                    //   }}
+                    // >
+                    //   View Full Details
+                    // </button>
+                  )} */}
+                </div>
+
+                {/* Border on hover/tap */}
+                <div 
+                  className={`absolute inset-0 border transition-all duration-500 ${
+                    isActive ? "border-gold/30" : "border-transparent"
+                  }`} 
+                />
+              </div>
+            );
+          })}
         </div>
 
         {/* Divider */}

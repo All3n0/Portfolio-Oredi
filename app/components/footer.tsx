@@ -2,10 +2,10 @@ import { Github, Instagram, Linkedin, Twitter, Youtube, Palette } from "lucide-r
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Github, label: "GitHub", href: "https://github.com", color: "hover:text-white" },
-    { icon: Instagram, label: "Instagram", href: "https://instagram.com", color: "hover:text-pink-400" },
-    { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com", color: "hover:text-blue-400" },
-    { icon: Twitter, label: "Twitter", href: "https://twitter.com", color: "hover:text-sky-400" },
+    { icon: Github, label: "GitHub", href: "https://github.com/eugeneoredi", color: "hover:text-white" },
+    { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/eugenestoobusy?igsh=d2Z3Y21maG9yN2Ri&utm_source=qr", color: "hover:text-pink-400" },
+    { icon: Linkedin, label: "LinkedIn", href: "https://ke.linkedin.com/in/eugene-oredi-08045830a", color: "hover:text-blue-400" },
+    { icon: Twitter, label: "Twitter", href: "https://x.com/eugeneoredi?s=11", color: "hover:text-sky-400" },
     { icon: Youtube, label: "YouTube", href: "https://youtube.com", color: "hover:text-red-400" },
     { icon: Palette, label: "Art Eugene Oredi", href: "#", color: "hover:text-gold" },
   ];
