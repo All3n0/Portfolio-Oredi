@@ -69,11 +69,11 @@ const AboutSection = () => {
     </p>
     <div className="flex items-center justify-center gap-6">
       <div className="text-center">
-        <CountUpNumber end={100} duration={3} className="text-gold text-xl font-display" />
+        <CountUpNumber end={10} duration={3} className="text-gold text-xl font-display" />
         <p className="text-cream/70 text-xs uppercase tracking-widest">Projects</p>
       </div>
       <div className="text-center">
-        <CountUpNumber end={50} duration={2.5} className="text-gold text-xl font-display" />
+        <CountUpNumber end={15} duration={2.5} className="text-gold text-xl font-display" />
         <p className="text-cream/70 text-xs uppercase tracking-widest">Students</p>
       </div>
       <div className="text-center">

@@ -4,7 +4,7 @@ import { Button } from "./button";
 
 const SketchHero = () => {
   return (
-    <section className="min-h-screen relative flex items-center justify-center overflow-hidden">
+    <section className=" pt-24 min-h-screen relative flex items-center justify-center overflow-hidden">
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-charcoal/50" />
       
